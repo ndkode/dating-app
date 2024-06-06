@@ -1,36 +1,39 @@
 import "reflect-metadata";
 import { UserController } from "./UserController";
 import container from "../inversify.config";
-
-import { HttpContext, interfaces } from "inversify-express-utils";
+import { mockReq, mockRes } from "sinon-express-mock";
+import { UserService } from "../services/UserService";
+import { createStubInstance } from "sinon";
+import User from "../models/User";
 
 describe("UserController", () => {
   let controller: UserController;
 
   beforeEach(() => {
-    const httpContext: HttpContext = {
-        request: <any>{},
-        response: <any>{},
-        container: container,
-        user: <any>{},
-    };
+    // Mock the UserService class (entire instance)
+    container.unbind(UserService);
+    const mockInstance = createStubInstance(UserService);
+    const user = new User();
+    user.username = "123";
+    mockInstance.findUserByEmail.resolves(user);
 
-    container
-      .bind<interfaces.HttpContext>(Symbol.for("HttpContext"))
-      .toConstantValue(httpContext);
+    container.bind(UserService).toConstantValue(mockInstance)
+
     controller = container.get(UserController);
   });
 
   describe("signup", () => {
-    it("should have a status code of 403", async () => {
-        const req = <any>{
-            body: {username: ""}
-        }
-        const res =<any> {}
+    it("should have a status code of 400", async () => {
+      const req = mockReq({
+        body: {
+          username: "nandangk95",
+          email: "nandang.k95@gmail.com",
+          password: "1234",
+        },
+      });
+      const res = mockRes();
       const response = await controller.signup(req, res);
-      console.log(response);
-      // expect(response).toBe().instanceof(results.JsonResult);
-      // expect(response.statusCode).to.equal(403);
+      expect(response?.statusCode).toEqual(400);
     });
   });
 });
