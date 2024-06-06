@@ -10,7 +10,6 @@ Services: a separate layer between the controllers and models. They encapsulate 
 
 Repositories: Specifically, repositories are often used within the service layer to handle data access and persistence. They provide an abstraction layer for interacting with the database or other data sources.
 
-
 ## Installation
 Prerequisites:
 
@@ -22,6 +21,7 @@ Installation using yarn:
 ```
 
 
+    
 ## Run Locally
 
 
@@ -31,3 +31,14 @@ Start the server
   yarn start
 ```
 
+
+## Documentation
+
+![App Screenshot](https://raw.githubusercontent.com/ndkode/dating-app/main/docs/ERD.png)
+
+[Documentation](https://linktodocumentation)
+
+
+## Tech Stack
+
+**Server:** Node, Express, Typescript, Inversify, mongoDB, jwt
